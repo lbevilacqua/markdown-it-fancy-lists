@@ -1,6 +1,6 @@
 {
-	"name": "markdown-it-fancy-lists",
-	"version": "1.1.0",
+	"name": "@lbevilacqua/markdown-it-fancy-lists",
+	"version": "1.1.1",
 	"description": "Extension for markdown-it to support additional numbering types for ordered lists ",
 	"keywords": [ "markdown-it-plugin", "markdown-it", "markdown", "commonmark", "fancy-lists", "ordered-list" ],
 	"author": {
@@ -8,6 +8,10 @@
 		"email": "info@moxio.com",
 		"url": "https://www.moxio.com"
 	},
+	"contributors": [{
+		"name": "Lorenzo Bevilacqua",
+		"email": "lorenzo@celatte.com"
+	}],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Moxio/markdown-it-fancy-lists.git"
