@@ -38,7 +38,7 @@ function parseUnorderedListMarker(state: StateBlock, startLine: number): { type:
 
 // Search `^(\d{1,9}|[a-z]|[A-Z]|[ivxlcdm]+|[IVXLCDM]+|#)([\u00BA\u00B0\u02DA\u1D52]?)([.)])`, returns next pos after marker on success
 // or -1 on fail.
-function parseOrderedListMarker(state: StateBlock, startLine: number): { bulletChar: string; hasOrdinalIndicator: boolean, delimiter: ")" | "."; posAfterMarker: number } | null {
+function parseOrderedListMarker(state: StateBlock, startLine: number): { bulletChar: string; hasOrdinalIndicator: boolean, delimiter: string; posAfterMarker: number } | null {
 	const start = state.bMarks[startLine] + state.tShift[startLine];
 	const max = state.eMarks[startLine];
 
@@ -77,7 +77,7 @@ function parseOrderedListMarker(state: StateBlock, startLine: number): { bulletC
 	return {
 		bulletChar: match[1],
 		hasOrdinalIndicator: match[2] !== "",
-		delimiter: match[3] as ")" | ".",
+		delimiter: match[3],
 		posAfterMarker: finalPos,
 	};
 }
@@ -126,7 +126,6 @@ function analyseMarker(state: StateBlock, startLine: number, endLine: number, pr
 	if (orderedListMarker !== null) {
 		const bulletChar = orderedListMarker.bulletChar;
 		const charCode = orderedListMarker.bulletChar.charCodeAt(0);
-		const delimiter = orderedListMarker.delimiter;
 
 		if (isCharCodeDigit(charCode)) {
 			return {
@@ -207,7 +206,7 @@ function analyseMarker(state: StateBlock, startLine: number, endLine: number, pr
 			isAlpha: false,
 			bulletChar: "",
 			hasOrdinalIndicator: false,
-			delimiter: ")",
+			delimiter: "",
 			start: 1,
 			...unorderedListMarker,
 		};
@@ -224,7 +223,7 @@ type Marker = {
 	type: MarkerType;
 	bulletChar: string;
 	hasOrdinalIndicator: boolean;
-	delimiter: ")" | ".";
+	delimiter: string;
 	start: number;
 	posAfterMarker: number;
 }
@@ -289,7 +288,7 @@ const createFancyList = (options: MarkdownItFancyListPluginOptions) => {
 		}
 
 		// We should terminate list on style change. Remember first one to compare.
-		const markerCharCode = state.src.charCodeAt(posAfterMarker - 1);
+		const markerCharCode = state.src.charCodeAt(marker.posAfterMarker - 1);
 
 		// For validation mode we can terminate immediately
 		if (silent) { return true; }
